@@ -1,0 +1,55 @@
+Proceso RegistroAsistencias
+
+    Definir Empleado como Registro
+        nombre : Cadena
+        edad : Entero
+        id : Cadena
+        presente : Logico
+        mesVacaciones : Cadena
+        diasVacaciones : Entero
+    FinRegistro
+
+    Definir empleado1 Como Empleado
+
+    // Entrada de datos del empleado
+    Escribir "Ingrese el nombre del empleado:"
+    Leer empleado1.nombre
+
+    Escribir "Ingrese la edad del empleado:"
+    Leer empleado1.edad
+
+    Escribir "Ingrese el ID del empleado:"
+    Leer empleado1.id
+
+    // Registro de asistencia
+    Definir opcion As Entero
+    Escribir "¿El empleado asistió hoy? (1=Sí, 2=No):"
+    Leer opcion
+
+    Si opcion = 1 Entonces
+        empleado1.presente <- Verdadero
+    Sino
+        empleado1.presente <- Falso
+    FinSi
+
+    // Elección de vacaciones
+    Escribir "Ingrese el mes en que desea tomar vacaciones:"
+    Leer empleado1.mesVacaciones
+
+    Escribir "Ingrese el número de días de vacaciones:"
+    Leer empleado1.diasVacaciones
+
+    // Mostrar resumen
+    Escribir ""
+    Escribir "===== RESUMEN DEL EMPLEADO ====="
+    Escribir "Nombre: ", empleado1.nombre
+    Escribir "Edad: ", empleado1.edad
+    Escribir "ID: ", empleado1.id
+    Si empleado1.presente Entonces
+        Escribir "Asistencia: Presente"
+    Sino
+        Escribir "Asistencia: Ausente"
+    FinSi
+    Escribir "Vacaciones: ", empleado1.diasVacaciones, " días en ", empleado1.mesVacaciones
+
+FinProceso
