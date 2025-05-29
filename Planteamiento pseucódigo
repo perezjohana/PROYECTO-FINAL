@@ -1,55 +1,49 @@
 Proceso RegistroAsistencias
 
-    Definir Empleado como Registro
-        nombre : Cadena
-        edad : Entero
-        id : Cadena
-        presente : Logico
-        mesVacaciones : Cadena
-        diasVacaciones : Entero
-    FinRegistro
+    Definir nombre, id, mesVacaciones Como Cadena
+    Definir edad, diasVacaciones, opcion Como Entero
+    Definir presente Como Logico
 
-    Definir empleado1 Como Empleado
-
-    // Entrada de datos del empleado
+    // Entrada de datos
     Escribir "Ingrese el nombre del empleado:"
-    Leer empleado1.nombre
+    Leer nombre
 
     Escribir "Ingrese la edad del empleado:"
-    Leer empleado1.edad
+    Leer edad
 
     Escribir "Ingrese el ID del empleado:"
-    Leer empleado1.id
+    Leer id
 
     // Registro de asistencia
-    Definir opcion As Entero
-    Escribir "¿El empleado asistió hoy? (1=Sí, 2=No):"
+    Escribir "¿El empleado asistió hoy? (1 = Sí, 2 = No):"
     Leer opcion
 
     Si opcion = 1 Entonces
-        empleado1.presente <- Verdadero
+        presente <- Verdadero
     Sino
-        empleado1.presente <- Falso
+        presente <- Falso
     FinSi
 
-    // Elección de vacaciones
+    // Vacaciones
     Escribir "Ingrese el mes en que desea tomar vacaciones:"
-    Leer empleado1.mesVacaciones
+    Leer mesVacaciones
 
     Escribir "Ingrese el número de días de vacaciones:"
-    Leer empleado1.diasVacaciones
+    Leer diasVacaciones
 
     // Mostrar resumen
     Escribir ""
-    Escribir "===== RESUMEN DEL EMPLEADO ====="
-    Escribir "Nombre: ", empleado1.nombre
-    Escribir "Edad: ", empleado1.edad
-    Escribir "ID: ", empleado1.id
-    Si empleado1.presente Entonces
+    Escribir "====== RESUMEN DEL EMPLEADO ======"
+    Escribir "Nombre: ", nombre
+    Escribir "Edad: ", edad
+    Escribir "ID: ", id
+
+    Si presente Entonces
         Escribir "Asistencia: Presente"
     Sino
         Escribir "Asistencia: Ausente"
     FinSi
-    Escribir "Vacaciones: ", empleado1.diasVacaciones, " días en ", empleado1.mesVacaciones
+
+    Escribir "Vacaciones: ", diasVacaciones, " días en ", mesVacaciones
 
 FinProceso
