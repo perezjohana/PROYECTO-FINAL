@@ -1,50 +1,60 @@
 
-Proceso RegistroAsistencias
+registros = []
 
-    Definir nombre, id, mesVacaciones Como Cadena
-    Definir edad, diasVacaciones, opcion Como Entero
-    Definir presente Como Logico
+def registrar_asistencia():
+    print("\n--- REGISTRO DE ASISTENCIA ---")
+    nombre = input("Nombre del empleado: ")
+    edad = input("Edad: ")
+    numero_control = input("Número de control: ")
+    hora_entrada = input("Hora de entrada (HH:MM): ")
+    hora_salida = input("Hora de salida (HH:MM): ")
+    fecha = input("Fecha (DD/MM/AAAA): ")
 
-    // Entrada de datos
-    Escribir "Ingrese el nombre del empleado:"
-    Leer nombre
+    registro = {
+        'nombre': nombre,
+        'edad': edad,
+        'numero_control': numero_control,
+        'hora_entrada': hora_entrada,
+        'hora_salida': hora_salida,
+        'fecha': fecha
+    }
 
-    Escribir "Ingrese la edad del empleado:"
-    Leer edad
+    registros.append(registro)
+    print("✅ Asistencia registrada con éxito.\n")
 
-    Escribir "Ingrese el ID del empleado:"
-    Leer id
+def mostrar_asistencias():
+    if not registros:
+        print("⚠️ No hay asistencias registradas.\n")
+        return
 
-    // Registro de asistencia
-    Escribir "¿El empleado asistió hoy? (1 = Sí, 2 = No):"
-    Leer opcion
+    print("\n--- REGISTROS DE ASISTENCIA ---")
+    for reg in registros:
+        print(f"Empleado: {reg['nombre']} | Edad: {reg['edad']} | Nº Control: {reg['numero_control']}")
+        print(f"Fecha: {reg['fecha']} | Entrada: {reg['hora_entrada']} | Salida: {reg['hora_salida']}")
+        print("---------------------------------------------")
+    print()
 
-    Si opcion = 1 Entonces
-        presente <- Verdadero
-    Sino
-        presente <- Falso
-    FinSi
+def menu():
+    while True:
+        print("Menú:")
+        print("1. Registrar asistencia")
+        print("2. Mostrar asistencias")
+        print("3. Salir")
 
-    // Vacaciones
-    Escribir "Ingrese el mes en que desea tomar vacaciones:"
-    Leer mesVacaciones
+        opcion = input("Seleccione una opción: ")
 
-    Escribir "Ingrese el número de días de vacaciones:"
-    Leer diasVacaciones
+        if opcion == '1':
+            registrar_asistencia()
+        elif opcion == '2':
+            mostrar_asistencias()
+        elif opcion == '3':
+            print("👋 Saliendo del programa...")
+            break
+        else:
+            print("❌ Opción inválida. Intente de nuevo.\n")
 
-    // Mostrar resumen
-    Escribir ""
-    Escribir "====== RESUMEN DEL EMPLEADO ======"
-    Escribir "Nombre: ", nombre
-    Escribir "Edad: ", edad
-    Escribir "ID: ", id
+def main():
+    menu()
 
-    Si presente Entonces
-        Escribir "Asistencia: Presente"
-    Sino
-        Escribir "Asistencia: Ausente"
-    FinSi
-
-    Escribir "Vacaciones: ", diasVacaciones, " días en ", mesVacaciones
-
-FinProceso
+if __name__ == "__main__":
+    main()
