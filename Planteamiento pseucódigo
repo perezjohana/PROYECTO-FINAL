@@ -1,60 +1,77 @@
+import tkinter as tk
+from tkinter import ttk
+from tkinter import messagebox
 
-registros = []
+trabajadores = []
 
-def registrar_asistencia():
-    print("\n--- REGISTRO DE ASISTENCIA ---")
-    nombre = input("Nombre del empleado: ")
-    edad = input("Edad: ")
-    numero_control = input("Número de control: ")
-    hora_entrada = input("Hora de entrada (HH:MM): ")
-    hora_salida = input("Hora de salida (HH:MM): ")
-    fecha = input("Fecha (DD/MM/AAAA): ")
-
-    registro = {
-        'nombre': nombre,
-        'edad': edad,
-        'numero_control': numero_control,
-        'hora_entrada': hora_entrada,
-        'hora_salida': hora_salida,
-        'fecha': fecha
+def guardar_trabajador():
+    trabajador = {
+        "Nombre": entry_nombre.get(),
+        "Fecha de nacimiento": entry_nacimiento.get(),
+        "Puesto": entry_puesto.get(),
+        "Sexo": entry_sexo.get(),
+        "Grado de estudios": entry_grado.get(),
+        "Cédula profesional": entry_cedula.get(),
+        "Domicilio": entry_domicilio.get(),
+        "Teléfono": entry_telefono.get(),
+        "Correo": entry_correo.get(),
+        "Fecha de ingreso": entry_ingreso.get()
     }
 
-    registros.append(registro)
-    print("✅ Asistencia registrada con éxito.\n")
+    for campo, valor in trabajador.items():
+        if not valor:
+            messagebox.showwarning("Campo vacío", f"Por favor complete el campo: {campo}")
+            return
 
-def mostrar_asistencias():
-    if not registros:
-        print("⚠️ No hay asistencias registradas.\n")
+    trabajadores.append(trabajador)
+    messagebox.showinfo("Éxito", "Trabajador registrado con éxito.")
+    limpiar_campos()
+
+def limpiar_campos():
+    for entrada in entradas:
+        entrada.delete(0, tk.END)
+
+def mostrar_trabajadores():
+    if not trabajadores:
+        messagebox.showinfo("Sin registros", "No hay trabajadores registrados.")
         return
 
-    print("\n--- REGISTROS DE ASISTENCIA ---")
-    for reg in registros:
-        print(f"Empleado: {reg['nombre']} | Edad: {reg['edad']} | Nº Control: {reg['numero_control']}")
-        print(f"Fecha: {reg['fecha']} | Entrada: {reg['hora_entrada']} | Salida: {reg['hora_salida']}")
-        print("---------------------------------------------")
-    print()
+    ventana = tk.Toplevel(root)
+    ventana.title("Lista de trabajadores")
 
-def menu():
-    while True:
-        print("Menú:")
-        print("1. Registrar asistencia")
-        print("2. Mostrar asistencias")
-        print("3. Salir")
+    columnas = list(trabajadores[0].keys())
+    tree = ttk.Treeview(ventana, columns=columnas, show="headings")
 
-        opcion = input("Seleccione una opción: ")
+    for columna in columnas:
+        tree.heading(columna, text=columna)
+        tree.column(columna, width=120)
 
-        if opcion == '1':
-            registrar_asistencia()
-        elif opcion == '2':
-            mostrar_asistencias()
-        elif opcion == '3':
-            print("👋 Saliendo del programa...")
-            break
-        else:
-            print("❌ Opción inválida. Intente de nuevo.\n")
+    for t in trabajadores:
+        tree.insert("", tk.END, values=list(t.values()))
 
-def main():
-    menu()
+    tree.pack(padx=10, pady=10, fill='x')
 
-if __name__ == "__main__":
-    main()
+root = tk.Tk()
+root.title("Registro del trabajador")
+root.geometry("450x600")
+
+etiquetas = [
+    "Nombre", "Fecha de nacimiento", "Puesto", "Sexo",
+    "Grado de estudios", "Cédula profesional (Sí/No)",
+    "Domicilio", "Teléfono", "Correo", "Fecha de ingreso"
+]
+
+entradas = []
+for texto in etiquetas:
+    tk.Label(root, text=texto + ":").pack()
+    entrada = tk.Entry(root)
+    entrada.pack()
+    entradas.append(entrada)
+
+entry_nombre, entry_nacimiento, entry_puesto, entry_sexo, entry_grado, \
+entry_cedula, entry_domicilio, entry_telefono, entry_correo, entry_ingreso = entradas
+
+tk.Button(root, text="Guardar trabajador", command=guardar_trabajador).pack(pady=10)
+tk.Button(root, text="Mostrar trabajadores", command=mostrar_trabajadores).pack(pady=5)
+
+root.mainloop()
