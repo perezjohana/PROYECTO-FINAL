@@ -4,32 +4,45 @@ from tkinter import messagebox
 
 trabajadores = []
 
+class Trabajador:
+    def __init__(self, nombre, nacimiento, puesto, sexo, grado, cedula, domicilio, telefono, correo, ingreso):
+        self.datos = {
+            'Nombre': nombre,
+            'Fecha de nacimiento': nacimiento,
+            'Puesto': puesto,
+            'Sexo': sexo,
+            'Grado de estudios': grado,
+            'Cédula profesional': cedula,
+            'Domicilio': domicilio,
+            'Teléfono': telefono,
+            'Correo': correo,
+            'Fecha de ingreso': ingreso
+        }
+
 def guardar_trabajador():
-    trabajador = {
-        "Nombre": entry_nombre.get(),
-        "Fecha de nacimiento": entry_nacimiento.get(),
-        "Puesto": entry_puesto.get(),
-        "Sexo": entry_sexo.get(),
-        "Grado de estudios": entry_grado.get(),
-        "Cédula profesional": entry_cedula.get(),
-        "Domicilio": entry_domicilio.get(),
-        "Teléfono": entry_telefono.get(),
-        "Correo": entry_correo.get(),
-        "Fecha de ingreso": entry_ingreso.get()
-    }
+    nombre = entry_nombre.get()
+    nacimiento = entry_nacimiento.get()
+    puesto = entry_puesto.get()
+    sexo = entry_sexo.get()
+    grado = entry_grado.get()
+    cedula = entry_cedula.get()
+    domicilio = entry_domicilio.get()
+    telefono = entry_telefono.get()
+    correo = entry_correo.get()
+    ingreso = entry_ingreso.get()
 
-    for campo, valor in trabajador.items():
-        if not valor:
-            messagebox.showwarning("Campo vacío", f"Por favor complete el campo: {campo}")
-            return
+    if not (nombre and nacimiento and puesto and sexo and grado and cedula and domicilio and telefono and correo and ingreso):
+        messagebox.showwarning("Campos vacíos", "Por favor, complete todos los campos.")
+        return
 
-    trabajadores.append(trabajador)
-    messagebox.showinfo("Éxito", "Trabajador registrado con éxito.")
+    t = Trabajador(nombre, nacimiento, puesto, sexo, grado, cedula, domicilio, telefono, correo, ingreso)
+    trabajadores.append(t)
+    messagebox.showinfo("Guardado", "Trabajador registrado con éxito.")
     limpiar_campos()
 
 def limpiar_campos():
-    for entrada in entradas:
-        entrada.delete(0, tk.END)
+    for campo in entradas:
+        campo.delete(0, tk.END)
 
 def mostrar_trabajadores():
     if not trabajadores:
@@ -39,21 +52,21 @@ def mostrar_trabajadores():
     ventana = tk.Toplevel(root)
     ventana.title("Lista de trabajadores")
 
-    columnas = list(trabajadores[0].keys())
-    tree = ttk.Treeview(ventana, columns=columnas, show="headings")
+    tree = ttk.Treeview(ventana, columns=list(trabajadores[0].datos.keys()), show="headings")
 
-    for columna in columnas:
-        tree.heading(columna, text=columna)
-        tree.column(columna, width=120)
+    for key in trabajadores[0].datos.keys():
+        tree.heading(key, text=key)
+        tree.column(key, width=120)
 
     for t in trabajadores:
-        tree.insert("", tk.END, values=list(t.values()))
+        tree.insert("", tk.END, values=list(t.datos.values()))
 
     tree.pack(padx=10, pady=10, fill='x')
 
 root = tk.Tk()
 root.title("Registro del trabajador")
 root.geometry("450x600")
+root.configure(bg="#E6CCFF")  
 
 etiquetas = [
     "Nombre", "Fecha de nacimiento", "Puesto", "Sexo",
@@ -62,16 +75,19 @@ etiquetas = [
 ]
 
 entradas = []
+
 for texto in etiquetas:
-    tk.Label(root, text=texto + ":").pack()
+    tk.Label(root, text=texto + ":", bg="#E6CCFF", font=("Arial", 10)).pack()
     entrada = tk.Entry(root)
     entrada.pack()
     entradas.append(entrada)
 
-entry_nombre, entry_nacimiento, entry_puesto, entry_sexo, entry_grado, \
-entry_cedula, entry_domicilio, entry_telefono, entry_correo, entry_ingreso = entradas
+entry_nombre, entry_nacimiento, entry_puesto, entry_sexo, entry_grado, entry_cedula, \
+entry_domicilio, entry_telefono, entry_correo, entry_ingreso = entradas
 
-tk.Button(root, text="Guardar trabajador", command=guardar_trabajador).pack(pady=10)
-tk.Button(root, text="Mostrar trabajadores", command=mostrar_trabajadores).pack(pady=5)
+boton_color = "#B266FF"
+
+tk.Button(root, text="Guardar trabajador", command=guardar_trabajador, bg=boton_color, fg="white").pack(pady=10)
+tk.Button(root, text="Mostrar trabajadores", command=mostrar_trabajadores, bg=boton_color, fg="white").pack(pady=5)
 
 root.mainloop()
