@@ -19,32 +19,40 @@ class Trabajador:
             'Fecha de ingreso': ingreso
         }
 
-def guardar_trabajador():
-    nombre = entry_nombre.get()
-    nacimiento = entry_nacimiento.get()
-    puesto = entry_puesto.get()
-    sexo = entry_sexo.get()
-    grado = entry_grado.get()
-    cedula = entry_cedula.get()
-    domicilio = entry_domicilio.get()
-    telefono = entry_telefono.get()
-    correo = entry_correo.get()
-    ingreso = entry_ingreso.get()
+def ventana_registro():
+    ventana = tk.Toplevel(root)
+    ventana.title("Registrar trabajador")
+    ventana.geometry("400x600")
+    ventana.configure(bg="#E6CCFF")
 
-    if not (nombre and nacimiento and puesto and sexo and grado and cedula and domicilio and telefono and correo and ingreso):
-        messagebox.showwarning("Campos vacíos", "Por favor, complete todos los campos.")
-        return
+    etiquetas = [
+        "Nombre", "Fecha de nacimiento", "Puesto", "Sexo",
+        "Grado de estudios", "Cédula profesional (Sí/No)",
+        "Domicilio", "Teléfono", "Correo", "Fecha de ingreso"
+    ]
 
-    t = Trabajador(nombre, nacimiento, puesto, sexo, grado, cedula, domicilio, telefono, correo, ingreso)
-    trabajadores.append(t)
-    messagebox.showinfo("Guardado", "Trabajador registrado con éxito.")
-    limpiar_campos()
+    entradas = []
 
-def limpiar_campos():
-    for campo in entradas:
-        campo.delete(0, tk.END)
+    for texto in etiquetas:
+        tk.Label(ventana, text=texto + ":", bg="#E6CCFF", font=("Arial", 10)).pack()
+        entrada = tk.Entry(ventana)
+        entrada.pack()
+        entradas.append(entrada)
 
-def mostrar_trabajadores():
+    def guardar():
+        datos = [e.get() for e in entradas]
+        if not all(datos):
+            messagebox.showwarning("Campos vacíos", "Por favor, complete todos los campos.")
+            return
+        t = Trabajador(*datos)
+        trabajadores.append(t)
+        messagebox.showinfo("Guardado", "Trabajador registrado con éxito.")
+        for entrada in entradas:
+            entrada.delete(0, tk.END)
+
+    tk.Button(ventana, text="Guardar trabajador", command=guardar, bg="#B266FF", fg="white").pack(pady=10)
+
+def ventana_mostrar():
     if not trabajadores:
         messagebox.showinfo("Sin registros", "No hay trabajadores registrados.")
         return
@@ -63,31 +71,52 @@ def mostrar_trabajadores():
 
     tree.pack(padx=10, pady=10, fill='x')
 
+def ventana_asistencia():
+    if not trabajadores:
+        messagebox.showwarning("Sin trabajadores", "No hay trabajadores registrados para tomar asistencia.")
+        return
+
+    ventana = tk.Toplevel(root)
+    ventana.title("Registro de asistencia")
+
+    checks = []
+    nombres = []
+
+    for t in trabajadores:
+        nombre = t.datos['Nombre']
+        var = tk.BooleanVar()
+        chk = tk.Checkbutton(ventana, text=nombre, variable=var)
+        chk.pack(anchor="w")
+        checks.append(var)
+        nombres.append(nombre)
+
+    def guardar_en_archivo():
+        with open("asistencias.txt", "a", encoding="utf-8") as f:
+            f.write("Asistencia registrada:\n")
+            for i, var in enumerate(checks):
+                estado = "Presente" if var.get() else "Ausente"
+                f.write(f"{nombres[i]}: {estado}\n")
+            f.write("\n")
+        messagebox.showinfo("Asistencia guardada", "La asistencia se ha guardado correctamente.")
+        ventana.destroy()
+
+    tk.Button(ventana, text="Guardar asistencia", command=guardar_en_archivo, bg="#B266FF", fg="white").pack(pady=10)
+
 root = tk.Tk()
-root.title("Registro del trabajador")
-root.geometry("450x600")
-root.configure(bg="#E6CCFF")  
+root.title("Panel de trabajadores")
+root.geometry("700x500")
+root.configure(bg="#F0E6FF")
 
-etiquetas = [
-    "Nombre", "Fecha de nacimiento", "Puesto", "Sexo",
-    "Grado de estudios", "Cédula profesional (Sí/No)",
-    "Domicilio", "Teléfono", "Correo", "Fecha de ingreso"
-]
+frame_contenido = tk.Frame(root, bg="#F0E6FF")
+frame_contenido.pack(side="left", fill="both", expand=True)
 
-entradas = []
+menu_lateral = tk.Frame(root, width=200, bg="#D9B3FF")
+menu_lateral.pack(side="right", fill="y")
 
-for texto in etiquetas:
-    tk.Label(root, text=texto + ":", bg="#E6CCFF", font=("Arial", 10)).pack()
-    entrada = tk.Entry(root)
-    entrada.pack()
-    entradas.append(entrada)
+tk.Label(menu_lateral, text="Menú", bg="#D9B3FF", font=("Arial", 14, "bold")).pack(pady=10)
 
-entry_nombre, entry_nacimiento, entry_puesto, entry_sexo, entry_grado, entry_cedula, \
-entry_domicilio, entry_telefono, entry_correo, entry_ingreso = entradas
-
-boton_color = "#B266FF"
-
-tk.Button(root, text="Guardar trabajador", command=guardar_trabajador, bg=boton_color, fg="white").pack(pady=10)
-tk.Button(root, text="Mostrar trabajadores", command=mostrar_trabajadores, bg=boton_color, fg="white").pack(pady=5)
+tk.Button(menu_lateral, text="Registrar trabajador", command=ventana_registro, bg="#B266FF", fg="white").pack(pady=10, fill='x', padx=10)
+tk.Button(menu_lateral, text="Mostrar trabajadores", command=ventana_mostrar, bg="#B266FF", fg="white").pack(pady=10, fill='x', padx=10)
+tk.Button(menu_lateral, text="Registrar asistencia", command=ventana_asistencia, bg="#B266FF", fg="white").pack(pady=10, fill='x', padx=10)
 
 root.mainloop()
