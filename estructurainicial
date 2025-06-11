@@ -1,27 +1,72 @@
+import tkinter as tk
+from tkinter import messagebox
+
 def registrar():
-    print("=== Registro de Datos del Trabajador ===")
+    datos = {
+        "Nombre": entry_nombre.get(),
+        "Fecha de nacimiento": entry_nacimiento.get(),
+        "Tipo de contratación": entry_contratacion.get(),
+        "Sexo": entry_sexo.get(),
+        "Último grado de estudio": entry_estudio.get(),
+        "Cédula profesional": entry_cedula.get(),
+        "Domicilio": entry_domicilio.get(),
+        "Teléfono": entry_telefono.get(),
+        "Correo electrónico": entry_correo.get(),
+        "Fecha de ingreso": entry_ingreso.get()
+    }
     
-    nombre = input("Nombre: ")
-    nacimiento = input("Fecha de nacimiento (dd/mm/aaaa): ")
-    contratacion = input("Tipo de contratación: ")
-    sexo = input("Sexo: ")
-    estudio = input("Último grado de estudio: ")
-    cedula = input("Cédula profesional: ")
-    domicilio = input("Domicilio: ")
-    telefono = input("Teléfono: ")
-    correo = input("Correo electrónico: ")
-    ingreso = input("Fecha de ingreso (dd/mm/aaaa): ")
+    mensaje = "Datos del registro:\n"
+    for campo, valor in datos.items():
+        mensaje += f"{campo}: {valor}\n"
 
-    print("\n=== Datos del registro ===")
-    print("Nombre:", nombre)
-    print("Fecha de nacimiento:", nacimiento)
-    print("Tipo de contratación:", contratacion)
-    print("Sexo:", sexo)
-    print("Último grado de estudio:", estudio)
-    print("Cédula profesional:", cedula)
-    print("Domicilio:", domicilio)
-    print("Teléfono:", telefono)
-    print("Correo electrónico:", correo)
-    print("Fecha de ingreso:", ingreso)
+    messagebox.showinfo("Registro completado", mensaje)
 
-registrar()
+ventana = tk.Tk()
+ventana.title("Registro de Datos del Trabajador")
+ventana.geometry("400x500")
+
+tk.Label(ventana, text="Nombre:").pack()
+entry_nombre = tk.Entry(ventana)
+entry_nombre.pack()
+
+tk.Label(ventana, text="Fecha de nacimiento (dd/mm/aaaa):").pack()
+entry_nacimiento = tk.Entry(ventana)
+entry_nacimiento.pack()
+
+tk.Label(ventana, text="Tipo de contratación:").pack()
+entry_contratacion = tk.Entry(ventana)
+entry_contratacion.pack()
+
+tk.Label(ventana, text="Sexo:").pack()
+entry_sexo = tk.Entry(ventana)
+entry_sexo.pack()
+
+tk.Label(ventana, text="Último grado de estudio:").pack()
+entry_estudio = tk.Entry(ventana)
+entry_estudio.pack()
+
+tk.Label(ventana, text="Cédula profesional:").pack()
+entry_cedula = tk.Entry(ventana)
+entry_cedula.pack()
+
+tk.Label(ventana, text="Domicilio:").pack()
+entry_domicilio = tk.Entry(ventana)
+entry_domicilio.pack()
+
+tk.Label(ventana, text="Teléfono:").pack()
+entry_telefono = tk.Entry(ventana)
+entry_telefono.pack()
+
+tk.Label(ventana, text="Correo electrónico:").pack()
+entry_correo = tk.Entry(ventana)
+entry_correo.pack()
+
+tk.Label(ventana, text="Fecha de ingreso (dd/mm/aaaa):").pack()
+entry_ingreso = tk.Entry(ventana)
+entry_ingreso.pack()
+
+tk.Button(ventana, text="Registrar", command=registrar).pack(pady=20)
+
+ventana.mainloop()
+
+
