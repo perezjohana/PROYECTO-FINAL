@@ -1,1 +1,50 @@
+Proceso RegistroDeTrabajador
+    Definir nombre, nacimiento, contratacion, sexo, estudio Como Cadena
+    Definir cedula, domicilio, telefono, correo, ingreso Como Cadena
+    
+    Escribir "=== Registro de Datos del Trabajador ==="
+    
+    Escribir "Nombre:"
+    Leer nombre
+    
+    Escribir "Fecha de nacimiento (dd/mm/aaaa):"
+    Leer nacimiento
+    
+    Escribir "Tipo de contratación:"
+    Leer contratacion
+    
+    Escribir "Sexo:"
+    Leer sexo
+    
+    Escribir "Último grado de estudio:"
+    Leer estudio
+    
+    Escribir "Cédula profesional:"
+    Leer cedula
+    
+    Escribir "Domicilio:"
+    Leer domicilio
+    
+    Escribir "Teléfono:"
+    Leer telefono
+    
+    Escribir "Correo electrónico:"
+    Leer correo
+    
+    Escribir "Fecha de ingreso (dd/mm/aaaa):"
+    Leer ingreso
+    
+    Escribir ""
+    Escribir "=== Datos del registro ==="
+    Escribir "Nombre: ", nombre
+    Escribir "Fecha de nacimiento: ", nacimiento
+    Escribir "Tipo de contratación: ", contratacion
+    Escribir "Sexo: ", sexo
+    Escribir "Último grado de estudio: ", estudio
+    Escribir "Cédula profesional: ", cedula
+    Escribir "Domicilio: ", domicilio
+    Escribir "Teléfono: ", telefono
+    Escribir "Correo electrónico: ", correo
+    Escribir "Fecha de ingreso: ", ingreso
+FinProceso
 
