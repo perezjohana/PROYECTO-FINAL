@@ -1,50 +1,27 @@
-Proceso RegistroDeTrabajador
-    Definir nombre, nacimiento, contratacion, sexo, estudio Como Cadena
-    Definir cedula, domicilio, telefono, correo, ingreso Como Cadena
+def registrar():
+    print("=== Registro de Datos del Trabajador ===")
     
-    Escribir "=== Registro de Datos del Trabajador ==="
-    
-    Escribir "Nombre:"
-    Leer nombre
-    
-    Escribir "Fecha de nacimiento (dd/mm/aaaa):"
-    Leer nacimiento
-    
-    Escribir "Tipo de contratación:"
-    Leer contratacion
-    
-    Escribir "Sexo:"
-    Leer sexo
-    
-    Escribir "Último grado de estudio:"
-    Leer estudio
-    
-    Escribir "Cédula profesional:"
-    Leer cedula
-    
-    Escribir "Domicilio:"
-    Leer domicilio
-    
-    Escribir "Teléfono:"
-    Leer telefono
-    
-    Escribir "Correo electrónico:"
-    Leer correo
-    
-    Escribir "Fecha de ingreso (dd/mm/aaaa):"
-    Leer ingreso
-    
-    Escribir ""
-    Escribir "=== Datos del registro ==="
-    Escribir "Nombre: ", nombre
-    Escribir "Fecha de nacimiento: ", nacimiento
-    Escribir "Tipo de contratación: ", contratacion
-    Escribir "Sexo: ", sexo
-    Escribir "Último grado de estudio: ", estudio
-    Escribir "Cédula profesional: ", cedula
-    Escribir "Domicilio: ", domicilio
-    Escribir "Teléfono: ", telefono
-    Escribir "Correo electrónico: ", correo
-    Escribir "Fecha de ingreso: ", ingreso
-FinProceso
+    nombre = input("Nombre: ")
+    nacimiento = input("Fecha de nacimiento (dd/mm/aaaa): ")
+    contratacion = input("Tipo de contratación: ")
+    sexo = input("Sexo: ")
+    estudio = input("Último grado de estudio: ")
+    cedula = input("Cédula profesional: ")
+    domicilio = input("Domicilio: ")
+    telefono = input("Teléfono: ")
+    correo = input("Correo electrónico: ")
+    ingreso = input("Fecha de ingreso (dd/mm/aaaa): ")
 
+    print("\n=== Datos del registro ===")
+    print("Nombre:", nombre)
+    print("Fecha de nacimiento:", nacimiento)
+    print("Tipo de contratación:", contratacion)
+    print("Sexo:", sexo)
+    print("Último grado de estudio:", estudio)
+    print("Cédula profesional:", cedula)
+    print("Domicilio:", domicilio)
+    print("Teléfono:", telefono)
+    print("Correo electrónico:", correo)
+    print("Fecha de ingreso:", ingreso)
+
+registrar()
