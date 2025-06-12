@@ -1,122 +1,160 @@
 import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox
+from tkinter import ttk, messagebox
 
-trabajadores = []
+class VentanaPrincipal:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Sistema de Control de Asistencias")
+        self.root.geometry("800x500")
+        self.root.configure(bg="#f5e6ff")  
 
-class Trabajador:
-    def __init__(self, nombre, nacimiento, puesto, sexo, grado, cedula, domicilio, telefono, correo, ingreso):
-        self.datos = {
-            'Nombre': nombre,
-            'Fecha de nacimiento': nacimiento,
-            'Puesto': puesto,
-            'Sexo': sexo,
-            'Grado de estudios': grado,
-            'Cédula profesional': cedula,
-            'Domicilio': domicilio,
-            'Teléfono': telefono,
-            'Correo': correo,
-            'Fecha de ingreso': ingreso
+        encabezado = tk.Label(
+            root,
+            text="Bienvenido al sistema de registro de empleados",
+            font=("Arial", 16, "bold"),
+            bg="#b57edc",  
+            fg="white",
+            pady=10
+        )
+        encabezado.pack(fill=tk.X)
+
+        self.main_frame = tk.Frame(root, bg="#f5e6ff")
+        self.main_frame.pack(fill=tk.BOTH, expand=True)
+
+        self.panel_derecho = tk.Frame(self.main_frame, bg="#dab6fc", width=200)
+        self.panel_derecho.pack(side=tk.RIGHT, fill=tk.Y)
+
+        tk.Label(self.panel_derecho, text="Menú", font=("Arial", 14, "bold"), bg="#dab6fc").pack(pady=20)
+
+        boton_color = "#b57edc"
+        for texto, comando in [
+            ("Registro de Empleado", self.abrir_registro),
+            ("Vacaciones", self.funcion_vacaciones),
+            ("Historial", self.mostrar_historial)
+        ]:
+            tk.Button(
+                self.panel_derecho,
+                text=texto,
+                bg=boton_color,
+                fg="white",
+                font=("Arial", 10, "bold"),
+                width=20,
+                command=comando
+            ).pack(pady=10)
+
+        tk.Button(
+            self.panel_derecho,
+            text="Salir",
+            bg="#a266c2",
+            fg="white",
+            font=("Arial", 10, "bold"),
+            width=20,
+            command=root.quit
+        ).pack(side=tk.BOTTOM, pady=20)
+
+    def abrir_registro(self):
+        nueva_ventana = tk.Toplevel(self.root)
+        RegistroTrabajador(nueva_ventana)
+
+    def mostrar_historial(self):
+        try:
+            with open("registro_trabajadores.txt", "r", encoding="utf-8") as archivo:
+                contenido = archivo.read()
+
+            ventana_historial = tk.Toplevel(self.root)
+            ventana_historial.title("Historial de Trabajadores")
+            ventana_historial.geometry("600x400")
+
+            texto = tk.Text(ventana_historial, wrap="word", font=("Arial", 10))
+            texto.insert("1.0", contenido if contenido else "No hay registros todavía.")
+            texto.config(state="disabled")
+            texto.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+
+        except FileNotFoundError:
+            messagebox.showinfo("Historial", "Aún no hay registros guardados.")
+        except Exception as e:
+            messagebox.showerror("Error", f"Ocurrió un error al abrir el archivo: {str(e)}")
+
+    def funcion_vacaciones(self):
+        messagebox.showinfo("Vacaciones", "Esta función será implementada próximamente.")
+
+class RegistroTrabajador:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Registro del Trabajador")
+        self.root.geometry("500x600")
+        self.root.configure(bg="#f5e6ff")
+
+        self.campos = {
+            "Nombre": tk.StringVar(),
+            "Fecha de nacimiento": tk.StringVar(),
+            "Tipo de contratación": tk.StringVar(),
+            "Sexo": tk.StringVar(),
+            "Último grado de estudio": tk.StringVar(),
+            "Cédula profesional": tk.StringVar(),
+            "Domicilio": tk.StringVar(),
+            "Teléfono": tk.StringVar(),
+            "Correo electrónico": tk.StringVar(),
+            "Fecha de ingreso": tk.StringVar(),
+            "Jornada": tk.StringVar()
         }
 
-def ventana_registro():
-    ventana = tk.Toplevel(root)
-    ventana.title("Registrar trabajador")
-    ventana.geometry("400x600")
-    ventana.configure(bg="#E6CCFF")
+        fila = 0
+        for campo, var in self.campos.items():
+            tk.Label(root, text=campo + ":", bg="#f5e6ff").grid(row=fila, column=0, padx=10, pady=5, sticky="e")
+            if campo == "Tipo de contratación":
+                opciones = ["Basificados", "Homologados", "Regularizados", "Contrato", "Suplente"]
+                entrada = ttk.Combobox(root, textvariable=var, values=opciones, state="readonly")
+            elif campo == "Sexo":
+                opciones = ["Masculino", "Femenino"]
+                entrada = ttk.Combobox(root, textvariable=var, values=opciones, state="readonly")
+            elif campo == "Jornada":
+                opciones = [
+                    "Matutino (7:00-2:30)",
+                    "Vespertino (2:00-8:30)",
+                    "Nocturno (Lun-Mie-Vie)",
+                    "Nocturno (Mar-Jue-Sab)",
+                    "Jornada Acumulada",
+                    "Jornada Acumulada Especial",
+                    "Jornada Mixta"
+                ]
+                entrada = ttk.Combobox(root, textvariable=var, values=opciones, state="readonly")
+            else:
+                entrada = tk.Entry(root, textvariable=var)
+            entrada.grid(row=fila, column=1, padx=10, pady=5)
+            fila += 1
 
-    etiquetas = [
-        "Nombre", "Fecha de nacimiento", "Puesto", "Sexo",
-        "Grado de estudios", "Cédula profesional (Sí/No)",
-        "Domicilio", "Teléfono", "Correo", "Fecha de ingreso"
-    ]
+        tk.Button(
+            root,
+            text="Guardar",
+            bg="#b57edc",
+            fg="white",
+            font=("Arial", 10, "bold"),
+            width=20,
+            command=self.guardar_datos
+        ).grid(row=fila, column=0, columnspan=2, pady=20)
 
-    entradas = []
+    def guardar_datos(self):
+        try:
+            for campo, var in self.campos.items():
+                if not var.get().strip():
+                    raise ValueError(f"El campo '{campo}' no puede estar vacío.")
 
-    for texto in etiquetas:
-        tk.Label(ventana, text=texto + ":", bg="#E6CCFF", font=("Arial", 10)).pack()
-        entrada = tk.Entry(ventana)
-        entrada.pack()
-        entradas.append(entrada)
+            with open("registro_trabajadores.txt", "a", encoding="utf-8") as archivo:
+                archivo.write("=== Registro de Trabajador ===\n")
+                for campo, var in self.campos.items():
+                    archivo.write(f"{campo}: {var.get()}\n")
+                archivo.write("\n")
 
-    def guardar():
-        datos = [e.get() for e in entradas]
-        if not all(datos):
-            messagebox.showwarning("Campos vacíos", "Por favor, complete todos los campos.")
-            return
-        t = Trabajador(*datos)
-        trabajadores.append(t)
-        messagebox.showinfo("Guardado", "Trabajador registrado con éxito.")
-        for entrada in entradas:
-            entrada.delete(0, tk.END)
+            messagebox.showinfo("Éxito", "Datos guardados correctamente.")
+            self.root.destroy()
 
-    tk.Button(ventana, text="Guardar trabajador", command=guardar, bg="#B266FF", fg="white").pack(pady=10)
+        except ValueError as ve:
+            messagebox.showerror("Error de validación", str(ve))
+        except Exception as e:
+            messagebox.showerror("Error", f"Ocurrió un error: {str(e)}")
 
-def ventana_mostrar():
-    if not trabajadores:
-        messagebox.showinfo("Sin registros", "No hay trabajadores registrados.")
-        return
-
-    ventana = tk.Toplevel(root)
-    ventana.title("Lista de trabajadores")
-
-    tree = ttk.Treeview(ventana, columns=list(trabajadores[0].datos.keys()), show="headings")
-
-    for key in trabajadores[0].datos.keys():
-        tree.heading(key, text=key)
-        tree.column(key, width=120)
-
-    for t in trabajadores:
-        tree.insert("", tk.END, values=list(t.datos.values()))
-
-    tree.pack(padx=10, pady=10, fill='x')
-
-def ventana_asistencia():
-    if not trabajadores:
-        messagebox.showwarning("Sin trabajadores", "No hay trabajadores registrados para tomar asistencia.")
-        return
-
-    ventana = tk.Toplevel(root)
-    ventana.title("Registro de asistencia")
-
-    checks = []
-    nombres = []
-
-    for t in trabajadores:
-        nombre = t.datos['Nombre']
-        var = tk.BooleanVar()
-        chk = tk.Checkbutton(ventana, text=nombre, variable=var)
-        chk.pack(anchor="w")
-        checks.append(var)
-        nombres.append(nombre)
-
-    def guardar_en_archivo():
-        with open("asistencias.txt", "a", encoding="utf-8") as f:
-            f.write("Asistencia registrada:\n")
-            for i, var in enumerate(checks):
-                estado = "Presente" if var.get() else "Ausente"
-                f.write(f"{nombres[i]}: {estado}\n")
-            f.write("\n")
-        messagebox.showinfo("Asistencia guardada", "La asistencia se ha guardado correctamente.")
-        ventana.destroy()
-
-    tk.Button(ventana, text="Guardar asistencia", command=guardar_en_archivo, bg="#B266FF", fg="white").pack(pady=10)
-
-root = tk.Tk()
-root.title("Panel de trabajadores")
-root.geometry("700x500")
-root.configure(bg="#F0E6FF")
-
-frame_contenido = tk.Frame(root, bg="#F0E6FF")
-frame_contenido.pack(side="left", fill="both", expand=True)
-
-menu_lateral = tk.Frame(root, width=200, bg="#D9B3FF")
-menu_lateral.pack(side="right", fill="y")
-
-tk.Label(menu_lateral, text="Menú", bg="#D9B3FF", font=("Arial", 14, "bold")).pack(pady=10)
-
-tk.Button(menu_lateral, text="Registrar trabajador", command=ventana_registro, bg="#B266FF", fg="white").pack(pady=10, fill='x', padx=10)
-tk.Button(menu_lateral, text="Mostrar trabajadores", command=ventana_mostrar, bg="#B266FF", fg="white").pack(pady=10, fill='x', padx=10)
-tk.Button(menu_lateral, text="Registrar asistencia", command=ventana_asistencia, bg="#B266FF", fg="white").pack(pady=10, fill='x', padx=10)
-
-root.mainloop()
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = VentanaPrincipal(root)
+    root.mainloop()
