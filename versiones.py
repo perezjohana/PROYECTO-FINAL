@@ -74,9 +74,37 @@ class VentanaPrincipal:
             messagebox.showinfo("Historial", "Aún no hay registros guardados.")
         except Exception as e:
             messagebox.showerror("Error", f"Ocurrió un error al abrir el archivo: {str(e)}")
+def funcion_vacaciones(self):
+    ventana_vacaciones = tk.Toplevel(self.root)
+    ventana_vacaciones.title("Periodos Vacacionales")
+    ventana_vacaciones.geometry("500x300")
+    ventana_vacaciones.configure(bg="#f5e6ff")
 
-    def funcion_vacaciones(self):
-        messagebox.showinfo("Vacaciones", "Esta función será implementada próximamente.")
+    tk.Label(
+        ventana_vacaciones,
+        text="Periodos Vacacionales",
+        font=("Arial", 14, "bold"),
+        bg="#b57edc",
+        fg="white",
+        pady=10
+    ).pack(fill=tk.X)
+
+    columnas = ("Nº", "Inicio", "Término", "Reanudando")
+    tabla = ttk.Treeview(ventana_vacaciones, columns=columnas, show="headings")
+
+    for col in columnas:
+        tabla.heading(col, text=col)
+        tabla.column(col, anchor="center")
+
+    datos = [
+        (1, "12-feb-2024", "23-feb-2024", "26-feb-2024"),
+        (2, "26-feb-2024", "08-mar-2024", "11-mar-2024"),
+    ]
+
+    for fila in datos:
+        tabla.insert("", "end", values=fila)
+
+    tabla.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 
 class RegistroTrabajador:
     def __init__(self, root):
